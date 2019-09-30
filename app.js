@@ -40,51 +40,39 @@ function getFromClient(request,response){
     }
 }
 
+var data = {msg:'no message...'};
+
 // access transaction
 function response_index(request, response) {
-    var msg = "これはIndexページです。"
+    // access throgh POST 
+    if (request.method == 'POST') {
+        
+        var body='';
+        
+        // receive data
+        request.on('data', (data) => {
+            body +=data;
+        });
+        
+        // end of receiving data
+        request.on('end',() => {
+            data = qs.parse(body);
+            write_index(request, response);
+        });
+    } else {
+        write_index(request, response);
+    }
+}
+
+// index
+function write_index(request, response) {
+    var msg = "※伝言を表示します。"
     var content = ejs.render(index_page, {
         title:"Index",
         content:msg,
+        data:data,
     });
     response.writeHead(200, {'Content-Type': 'text/html'});
     response.write(content);
     response.end();
-}
-
-function response_other(request, response) {
-    var msg = "これはOtherページです。"
-
-    if(request.method == 'POST') {
-        var body ='';
-
-        // データ受信のイベント処理
-        request.on('data', (data) => {
-            body += data;
-        });
-        
-        // ivent transac: end of receving data
-        request.on('end',() => {
-            var post_data = qs.parse(body);
-            msg += 'あなたは、「' + post_data.msg + '」と書きました。';
-            var content = ejs.render(other_page, {
-                title:"Other",
-                content:msg,
-            });
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            response.write(content);
-            response.end();
-        });
-
-    // GET method
-    } else {
-        var msg = "cannnot find page."
-        var content = ejs.render(other_page, {
-            title:"Other",
-            content:msg,
-        })
-        response.writeHead(200, {'Content-Type': 'text/html'});
-        response.write(content);
-        response.end();
-    }
 }
