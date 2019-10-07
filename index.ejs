@@ -15,10 +15,10 @@
             <tr><th>伝言です！</th></tr>
             <tr><td><%=data.msg %></td></tr>
         </table></p>
-        <p>
+        <p>your latest message:<%= cookie_data %></p>
             <form action="/" method="post">
-                MESSAGE <input type="text" name="msg">
-                <input type="submit" value="送信">
+                <p>MESSAGE <input type="text" name="msg">
+                <input type="submit" value="送信"></p>
             <!-- </form>     -->
         </p>
     </div>
