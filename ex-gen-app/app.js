@@ -16,6 +16,7 @@ var session_opt = {
   saveUninitialized: false,
   cookie: { maxAge: 60 * 60 * 1000 }
 };
+var ajax = require('./routes/ajax');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/ajax', ajax);
 
 app.use(session(session_opt));
 
